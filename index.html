@@ -53,12 +53,25 @@
         color: #333;
         min-height: 40px;
       }
+
+      select {
+        margin-top: 10px;
+        padding: 5px;
+        font-size: 16px;
+      }
     </style>
   </head>
   <body>
     <div id="container">
       <h1>Speech to Text</h1>
-      <button id="start-btn">Start Talking</button>
+      <label for="language">Choose a language:</label>
+      <select id="language">
+        <option value="ko-KR">Korean</option>
+        <option value="en-US" selected>English</option>
+      </select>
+      <div>
+        <button id="start-btn">Start Talking</button>
+      </div>
       <p>당신이 말한 내용 :</p>
       <p id="result"></p>
     </div>
@@ -66,12 +79,20 @@
     <script>
       const startBtn = document.getElementById("start-btn");
       const result = document.getElementById("result");
+      const languageSelect = document.getElementById("language");
 
       const recognition = new (window.SpeechRecognition ||
         window.webkitSpeechRecognition)();
-      recognition.lang = "en-US"; // 언어 설정
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
+
+      // Update recognition language based on selection
+      languageSelect.addEventListener("change", () => {
+        recognition.lang = languageSelect.value;
+      });
+
+      // Initialize with default language
+      recognition.lang = languageSelect.value;
 
       startBtn.addEventListener("click", () => {
         recognition.start();
